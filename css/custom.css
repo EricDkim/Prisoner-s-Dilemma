@@ -1,0 +1,345 @@
+/*administration page */
+.indexblock{
+    background-color:silver;
+}
+
+img
+{
+width:100%;
+}
+
+.myimg
+{
+	opacity:.5;	
+	color:green;
+}
+
+#inner
+{
+background-color:white;
+}
+
+.bigwrapper
+{
+    background-color:silver;
+	position:absolute;
+	left:7.5%;
+	top:20%;
+	width:85%;
+}
+.table-responsive
+{
+opacity:.9;
+}
+
+.navbar-default .navbar-brand
+{
+ color:#fff;
+}
+
+.navbar-default .navbar-nav>li>a
+{
+ color:#fff;
+}
+
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+  color:black;
+  background-color: #a0a0a0;
+  /*background-color: #ccc;*/
+}
+
+.navbar-default .navbar-collapse, .navbar-default .navbar-form
+{
+ color:#fff;
+}
+
+.navbar-default {
+    background-color: #333;
+    border-color: #ffd90f;
+}
+
+.label-info
+{
+	background-color:#333;
+}
+
+.mypanel
+{
+	position:absolute;
+	left:40%;
+	bottom:0;
+	top:30%;
+	opacity:.92;
+}
+
+/*restoring*/
+
+.btn-default 
+{
+    color: white;
+}
+
+#choosecourse
+{
+    background-color: #ccc;
+}
+
+/*admin list*/
+.dropdown-menu>li>a 
+{
+	clear:left;
+}
+
+/*end*/
+
+
+/*This is for the index page*/
+.indexbody{
+background-color:white;
+}
+
+#indexform
+{
+	position:relative;
+	top:-65;
+	left:35%;
+}
+
+.indexcontainer
+{
+
+background-color:white;
+}
+
+.indextitle
+{
+	font-size:290%;
+	position:relative;
+	margin-bottom:140px;
+}
+
+.indexbtn
+{
+	postion:absolute;
+	botom:2%;
+	let:33%;
+	widh:10%;
+}
+
+.indexbtn2
+{
+	poition:absolute;
+	bottm:2%;
+	rigt:33%;
+	with:10%;
+	
+}
+
+.btn-primary
+{
+	background-color:black;
+}
+
+.label-default
+{
+	background-color:black;
+	border:#2e6da4 1px solid;	
+}
+
+#admindropdown
+{
+	background-color:black;
+	border:#2e6da4 1px solid;	
+}
+
+#admindropdown:hover,
+#admindropdown:focus
+{
+	background-color:#969696;
+	border:#2e6da4 1px solid;	
+}
+
+#indeximg
+{
+	border:#ffd90f 1px solid;	
+}
+
+#zsname
+{
+	background-image:url(../img/burst-of-green-sparks.jpg);
+
+	background-position:cover;
+	background-repeat:none;
+	color:white;
+	height:60px;
+}
+
+#indexjumbo
+{
+    background: url("../img/American History X-Cellent.jpg") no-repeat center center; 
+    -webkit-background-size: 90% 100%;
+    -moz-background-size: 90% 100%;
+    -o-background-size: 90% 100%;
+    background-size: 90% 100%;
+	opacity:.8;
+	
+}
+/* Profile page */
+.outerContainer {
+	height: 80px;
+	overflow: hidden;
+	width: 80px;
+	border-radius: 50%;
+	border-bottom: 1px solid #CCCCCC;
+	border-right: 1px solid #CCCCCC;
+}
+
+.innerContainer
+{
+	width: 100%;
+	font-size: 20px;
+	color: white;
+}
+
+/* user's online */
+.user-list li
+{
+	float: left;
+	margin: 10px;
+	text-transform: uppercase;
+	text-decoration: none;
+}
+  
+.user-list li .outerContainer
+{
+	display: table;
+	height: 80px;
+	overflow: hidden;
+	width: 80px;
+	border-radius: 50%;
+	border-bottom: 1px solid #CCCCCC;
+	border-right: 1px solid #CCCCCC;
+}
+  
+.user-list li .outerContainer:Hover
+{
+	background-color: #EBEBEB;
+}
+
+.user-list li .outerContainer .innerContainer
+{
+	display: table-cell;
+	vertical-align: middle;
+	width: 100%;
+	margin: 0 auto;
+	text-align: center;
+	font-size: 20px;
+	color: white;
+}
+
+/* playgame page <probably should be automatic somehow>*/
+.yellow {
+	background-color: yellow;
+}
+.red {
+	background-color: red;
+}
+.blue {
+	background-color: blue;
+}
+.green {
+	background-color: green;
+}
+.black {
+ 	background-color: black;
+}
+
+#totalScore {
+	height: 40px;
+	background-color: orange;
+	border: 1px solid black;
+	font-size: 18px;
+	padding: 5px;
+}
+#previousScore {
+	height: 40px;
+	background-color: red;
+	border: 1px solid black;
+	font-size: 18px;
+	padding: 5px;
+}
+
+#gameScreen {
+	height: 300px;
+	border: 1px solid #000000;
+	background-color: #123456;
+}
+
+/*Play Iterative Mode page*/
+.customBadge
+{
+    display: inline-block;
+    min-width: 10px;
+    padding: 3px 7px;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1;
+    color: #0f0;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    background-color: #000;
+    border-radius: 10px;
+	float: right;
+}
+
+/*This will need to be handled in javascript so this is 
+manually done for demonstration purposes only*/
+.customBadgeAct
+{
+    display: inline-block;
+    min-width: 10px;
+    padding: 3px 7px;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1;
+    color: #f00;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    background-color: #fff;
+    border-radius: 10px;
+	float: right;
+}
+
+#gameContacts
+{
+	position: relative;
+	left:;
+	top:;
+}
+
+b{
+	font-size:20px;
+}
+
+#dilemmas
+{
+	border: 1px solid black;
+}
+
+/*edit pages */
+#message 
+{
+	width: 50%;
+	margin: 2% 40%;
+}
+
+
+.reportheader
+{
+    text-align:center;
+    background-color: #31708f;
+    color: white;    
+}
