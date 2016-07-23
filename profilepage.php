@@ -42,7 +42,7 @@
 						{
 					?>
 						<li><a href="useronline.php">Who's Online</a></li>  
-						<!--<li><a href="playgame.php">Play Iterative Mode</a></li>-->   
+						<li><a href="playgame_iterative.php">Play Iterative Mode</a></li>
 						<li><a href="playgame_live.php">Play Game</a></li> 					
 					<?php
 						}

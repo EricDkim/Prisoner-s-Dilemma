@@ -9,7 +9,7 @@
 	@session_start(); // Starting Session 
 	// Storing Session
 	$user_check=$_SESSION['login_user'];  
-    $user_id = $_SESSION['user_id'];
+    //$user_id = $_SESSION['user_id'];
 
 	$result = $dbc->query("SELECT users.id, users.first_name, users.last_name, users.usernames, users.email, users.course, users.section,users.time, users.score, login_history.busy FROM users INNER JOIN login_history ON users.id = login_history.id WHERE usernames='$user_check'");
 	$row = $result->fetch_assoc();
@@ -21,9 +21,26 @@
 	$login_session_email=$row['email'];
 	$course=$row['course'];
 	$section=$row['section'];
-	//added for Play Random Mode
-	$_SESSION['course'] = $course;
-	$_SESSION['section'] = $section;
+
+    //IterativeORrandomCheck
+    if (true)
+    {
+        //added for Play Iterative Mode
+	   $_SESSION['course'] = $course;
+	   $_SESSION['section'] = $section;
+		$score = $row['score'];
+		$busy = $row['busy'];
+		$time= $row['time'];
+		$sql = "SELECT id FROM games_iterative WHERE (player1='$login_id' OR player2='$login_id') AND (status=6)";
+		$query = $dbc->query($sql);
+		$gplayed = $query->num_rows;
+	   //end additions
+    }
+    else
+    {
+	   //added for Play Random Mode
+	   $_SESSION['course'] = $course;
+	   $_SESSION['section'] = $section;
 		$score = $row['score'];
 		$busy = $row['busy'];
 		$time= $row['time'];
@@ -31,8 +48,7 @@
 		$query = $dbc->query($sql);
 		$gplayed = $query->num_rows;
 	//end additions
-
-
+    }    
 
 	$_SESSION['login_id'] = $login_id;
 

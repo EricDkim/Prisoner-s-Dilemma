@@ -63,7 +63,8 @@
 		$id = $_POST['id'];
 			
 		//execute the query
-		$result = mysqli_query($dbc, "delete from course where id = '$id'");
+		$result = mysqli_query($dbc, "DELETE FROM course WHERE id = '$id'");        
+        $result2 = mysqli_query($dbc, "DELETE FROM iterative_teams WHERE Course_ID = '$id'" );
 
 		if (!$result)
 		{
@@ -72,7 +73,7 @@
 		}
 						
 		//if everything was ok:
-		if(mysqli_affected_rows($dbc) == 1)
+		if(mysqli_affected_rows($dbc) <= 2)
 		{
 			//Ok message confirmation:
 			echo "Great. This course has been deleted. <br/>";

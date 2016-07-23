@@ -99,90 +99,11 @@
 			?>
 		</div>
 		<br/>
-		<div>			
-			<?php
-				echo "<table align='center' border=1 cellspace='3' cellpadding='3' width='75%'>
-				<h3><span style=\"width: 50%; margin: 0% 12.5%\" class=\"label label-success\">Current Iterative Groups</span><small><a href='iterative_limit.php'>Set Round Limit</a></small></h3>
-				<tr>
-					<th align='left'><b>Group Number</b></th>
-					<th align='left'><b>Group of User</b></th>				
-					<th align='left'><b>Group Member 02</b></th>					
-					<th align='left'><b>Group Member 03</b></th>
-					<th align='left'><b>Group Member 04</b></th>										
-				</tr>";
 
-				$r = mysqli_query($dbc, "SELECT * FROM iterative_teams");
-				while ($row = mysqli_fetch_array($r))
-				{
-					echo 
-					"<tr>
-					<td>".
-						$row["id"]
-					."</td>
-					<td>".
-						$row["member1"]
-					."</td>
-					<td>".
-						$row["member2"]
-					."</td>
-					<td>".
-						$row["member3"]
-					."</td>
-					<td>".
-						$row["member4"]
-					."</td>
-					</tr>";
-				}
-				echo '</table>';
-			?>
-		</div>
-		<br/>
-		<div>			
-			<?php
-				echo "<table align='center' border=1 cellspace='3' cellpadding='3' width='75%'>
-				<h3><span style=\"width: 50%; margin: 0% 12.5%\" class=\"label label-success\">Current Random Groups</span><small><a href='random_limit.php'>Set Round Limit</a></small></h3> 
-				<tr>
-					<th align='left'><b>Group Number</b></th>
-					<th align='left'><b>Group Member 01</b></th>				
-					<th align='left'><b>Group Member 02</b></th>					
-					<th align='left'><b>Group Member 03</b></th>									
-				</tr>";
-
-				$whereclause = "(SELECT id FROM users WHERE (course, section) NOT IN (SELECT course, section FROM added_iterate_classes))";
-				$rnd_groups = mysqli_query($dbc, "SELECT DISTINCT random_group FROM teamcode WHERE users_id IN ".$whereclause." ORDER BY random_group");
-				$rnd_count = mysqli_num_rows($rnd_groups); //how many 
-				$rnd_group = mysqli_fetch_array($rnd_groups); //who are they								
-				echo $rnd_group['random_group'];
-				$r = mysqli_query($dbc, "SELECT * FROM teamcode WHERE users_id IN ".$whereclause." AND random_group = ".$rnd_group['random_group']);
-				$i = 0;
-				
-				//check that players are in the random table first!
-				$random_table_populated = mysqli_query($dbc, "SELECT * FROM random_game");
-				if (mysqli_num_rows($random_table_populated) > 0)
-					while ($i < $rnd_count)
-					{
-						echo 
-						"<tr>
-						<td>".
-							$i
-						."</td>";
-						while ($row = mysqli_fetch_array($r))
-						{
-							echo "<td>".
-								$row["tag"]
-							."</td>";
-						}
-						echo "</tr>";
-						
-						//call the next group and then call all users in that group
-						$rnd_group = mysqli_fetch_array($rnd_groups); //who are they
-						$r = mysqli_query($dbc, "SELECT * FROM teamcode WHERE users_id IN ".$whereclause." AND random_group = ".$rnd_group['random_group']);				
-						$i++;
-					}
-				echo '</table>';
-			?>
-		</div>		
+		<br/>        	
 		
+        <!--  end Navigation Bar -->        
+        
 		<div>
 			<?php
 				echo "<table align='center' border=1 cellspace='3' cellpadding='3' width='75%'>
@@ -190,27 +111,48 @@
 				<tr>
 					<th align='left'><b>Edit</b></th>
 					<th align='left'><b>Delete</b></th>
+                    <th align='left'><b>Set Teams</b></th>
 					<th align='left'><b>Course and Course Number</b></th>
 					<th align='left'><b>Section</b></th>
+                    <th align='left'><b>Iterative Mode</b></th>
 				</tr>";
 
-				$r = mysqli_query($dbc, "SELECT * FROM course  ORDER BY course_and_number, section");
+				//$r = mysqli_query($dbc, "SELECT * FROM course  ORDER BY course_and_number, section");
+                $r = mysqli_query($dbc, "SELECT id, course_and_number, section, isIterative FROM course ORDER BY course_and_number, section");
 				while ($row = mysqli_fetch_array($r))
 				{
 					echo 
-					"<tr>
-					<td>
-						<a href='edit_course.php?id=".$row['id']."&course=".$row['course_and_number']."&section=".$row['section']."'>Edit</a>
-					</td>
-					<td>
-						<a href='delete_course.php?id=".$row['id']."&course=".$row['course_and_number']."&section=".$row['section']."'>Delete</a>
-					</td>
-					<td>".
-						$row["course_and_number"]
-					."</td>
-					<td>".
-						$row["section"]
-					."</td>
+					"<tr>					
+                        <td style='text-align:center'>
+                            <a href='edit_course.php?id=".$row['id']."&course=".$row['course_and_number']."&section=".$row['section']."'>Edit</a>
+                        </td>
+                        <td style='text-align:center'>
+                            <a href='delete_course.php?id=".$row['id']."&course=".$row['course_and_number']."&section=".$row['section']."'>Delete</a>
+                        </td>
+                        <td style='text-align:center'>"; 
+                    
+                            if ($row["isIterative"]=='Yes'){
+                        
+                            echo "
+                            <a href='Team_course.php?id=".$row['id']."&course=".$row['course_and_number']."&section=".$row['section']."'>Set Teams</a>
+                            ";
+                            }
+                            else
+                            {
+                                echo "&nbsp";
+                            }
+                            
+                            echo "
+                        </td>
+                        <td>".
+                            $row["course_and_number"]
+                        ."</td>
+                        <td style='text-align:center'>".
+                            $row["section"]
+                        ."</td>
+                        <td style='text-align:center'>".
+                            $row["isIterative"]
+                        ."</td>
 					</tr>";
 				}
 				echo '</table>';
@@ -222,62 +164,7 @@
 		<br/><br/>
 		
 			
-			<h3><span style="width: 50%; margin: 0% 12.5%" class="label label-success">Select Courses to Play Iterative</span></h3>
-
 			
-	<div style="width: 50%; margin: 0% 11.5%">			
-		<?php
-			echo "";
-			$unchecked_classes = mysqli_query($dbc, "SELECT course_and_number, section FROM course  WHERE (course_and_number, section) NOT IN (SELECT course, section FROM added_iterate_classes)");
-			$checked_classes = mysqli_query($dbc, "SELECT course, section FROM added_iterate_classes WHERE (course, section) IN (SELECT course_and_number, section FROM course)");
-
-			$count = 0;
-				while ($checked_class = mysqli_fetch_array($checked_classes))
-				{
-					echo 
-					"
-					<div class=\"col-lg-6\">
-						<div class=\"input-group\">
-						  <span class=\"input-group-addon\">
-							<input type=\"checkbox\" name='course' value='".$checked_class["course"].",".$checked_class["section"]."' checked>
-						  </span>
-						  <input type=\"text\" class=\"form-control\" readonly value='".$checked_class["course"]." Section ".$checked_class["section"]."'>
-						</div>
-					  </div> 
-					";		
-
-					if ($count == 1)
-					{
-						echo "<br/><br/>";
-						$count=0;
-					}
-					else
-						$count++;					
-				}
-				while ($unchecked_class = mysqli_fetch_array($unchecked_classes))
-				{
-					echo 
-					"
-					<div class=\"col-lg-6\">
-						<div class=\"input-group\">
-						  <span class=\"input-group-addon\">
-							<input type=\"checkbox\" name='course' value='".$unchecked_class["course_and_number"].",".$unchecked_class["section"]."' >
-						  </span>
-						  <input type=\"text\" class=\"form-control\" readonly value='".$unchecked_class["course_and_number"]." Section ".$unchecked_class["section"]."'>
-						</div>
-					  </div> 
-					";
-					
-					if ($count == 1)
-					{
-						echo "<br/><br/>";
-						$count=0;
-					}
-					else
-						$count++;					
-				}					
-		?>
-				<br/>
 				<br/><br/>
 				<Button type="button" class="btn btn-lg btn-warning" id="updateIterative" style="position:relative; left:61%;" >
 					Refresh Iterative Teams

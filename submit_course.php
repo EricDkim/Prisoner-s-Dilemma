@@ -61,9 +61,12 @@
 			//get the query
 			$course = $_POST['course'];
 			$section = $_POST['section'];
-				
+            $iterative=$_POST['isIterative'];
+            
+        
 			//returns true or false for update
-			$result = mysqli_query($dbc, "INSERT INTO course(course_and_number, section) VALUES ('$course', '$section')");
+			$result = mysqli_query($dbc, "INSERT INTO course(course_and_number, section, isIterative) VALUES ('$course', '$section', '$iterative')");        
+        
 			if (!$result)
 			{
 				print "Error - the query could not be executed: <br/>" . mysqli_error($dbc);
