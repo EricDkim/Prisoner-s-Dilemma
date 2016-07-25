@@ -32,9 +32,15 @@
 			<div class="collapse navbar-collapse" id="collapse">
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="index.php">Home</a></li>
+                    <?php
+                        include("getPlayGame.php");                        
+                    ?>
 					<li><a href="useronline.php">Who's Online</a></li>
-          <!-- <li><a href="playgame.php">Play Iterative Mode</a></li> -->
+                    
+                    <!-- 
+                    <li><a href="playgame.php">Play Iterative Mode</a></li> 
 					<li class="active"><a href="playgame_iterative.php">Play Game</a></li>
+                    -->
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">My Account <span class="caret"></span></a>
 						<ul class="dropdown-menu">

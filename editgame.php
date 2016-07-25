@@ -54,57 +54,13 @@
 	<div class="page-header">
 	  <h1>Welcome Administrator <small>TO THE EDIT GAME MENU</small></h1>	
 		<hr/>
+                <!--
 				<Button type="button" class="btn btn-lg btn-danger" id="dumpSemesterData" style="position:relative; left:40%;" >
 					Dump Semester Data
 				</button>		
-		<div>
-			<?php
-				echo "<table align='center' border=1 cellspace='3' cellpadding='3' width='75%'>
-				<h3><span style=\"width: 50%; margin: 0% 12.5%\" class=\"label label-success\">Edit Users</span></h3>
-				<tr>
-					<th align='left'><b>Edit</b></th>
-					<th align='left'><b>Delete</b></th>
-					<th align='left'><b>User Tag</b></th>
-					<th align='left'><b>Full Name</b></th>
-					<th align='left'><b>Course</b></th>
-					<th align='left'><b>Section</b></th>
-				</tr>";
-
-				$r = mysqli_query($dbc, "SELECT * FROM users u JOIN teamcode tc ON u.id = tc.users_id ORDER BY course, section");
-				while ($row = mysqli_fetch_array($r))
-				{
-					echo 
-					"<tr>
-					<td>
-						<a href='edit_user.php?id=".$row['id']."&fname=".$row['first_name']."&lname=".$row['last_name']."&course=".$row['course']."&pwd=".$row['pw']."&section=".$row['section']."&group=".$row['user_group']."'>Edit</a>
-					</td>
-					<td>
-						<a href='delete_user.php?id=".$row['id']."&fname=".$row['first_name']."&lname=".$row['last_name']."&course=".$row['course']."&section=".$row['section']."'>Delete</a>
-					</td>
-					<td>".
-						$row["tag"]
-					."</td>
-					<td>".
-						$row["first_name"]." ".$row["last_name"]
-					."</td>
-					<td>".
-						$row["course"]
-					."</td>
-					<td>".
-						$row["section"]
-					."</td>
-					</tr>";
-				}
-				echo '</table>';
-			?>
-		</div>
-		<br/>
-
-		<br/>        	
-		
-        <!--  end Navigation Bar -->        
-        
-		<div>
+                -->
+		<!-- COURSES -->
+        <div>
 			<?php
 				echo "<table align='center' border=1 cellspace='3' cellpadding='3' width='75%'>
 				<h3><span style=\"width: 50%; margin: 0% 12.5%\" class=\"label label-success\">Edit Courses</span></h3>
@@ -161,12 +117,12 @@
 				<button type="button" class="btn btn-lg btn-warning" style="position:relative; left:43%;" aria-haspopup="true" aria-expanded="false" id="addcour">
 					Add Course
 				</button>	
+            
 		<br/><br/>
-		
-			
-			
-				<br/><br/>
-				<Button type="button" class="btn btn-lg btn-warning" id="updateIterative" style="position:relative; left:61%;" >
+					
+				<!--
+	            <br/><br/>
+                <Button type="button" class="btn btn-lg btn-warning" id="updateIterative" style="position:relative; left:61%;" >
 					Refresh Iterative Teams
 				</button>
 				<br/>
@@ -176,10 +132,64 @@
 				<div style="width:50%; margin:-1% auto; position:relative; left:35%;">
 				(<span style="color:red;">Unchecked</span> classes will play random)	
 				</div>		
-			</div>
-		</div>		
-	</div>	
+                -->
+        </div>
+        
+        
+        <!-- USERS -->
+        <div>
+			<?php
+				echo "<table align='center' border=1 cellspace='3' cellpadding='3' width='75%'>
+				<h3><span style=\"width: 50%; margin: 0% 12.5%\" class=\"label label-success\">Edit Users</span></h3>
+				<tr>
+					<th align='left'><b>Edit</b></th>
+					<th align='left'><b>Delete</b></th>
+					<th align='left'><b>User Tag</b></th>
+					<th align='left'><b>Full Name</b></th>
+					<th align='left'><b>Course</b></th>
+					<th align='left'><b>Section</b></th>
+				</tr>";
 
+				$r = mysqli_query($dbc, "SELECT * FROM users u JOIN teamcode tc ON u.id = tc.users_id ORDER BY course, section, last_name, first_name");
+				while ($row = mysqli_fetch_array($r))
+				{
+					echo 
+					"<tr>
+					<td>
+						<a href='edit_user.php?id=".$row['id']."&fname=".$row['first_name']."&lname=".$row['last_name']."&course=".$row['course']."&pwd=".$row['pw']."&section=".$row['section']."&group=".$row['user_group']."'>Edit</a>
+					</td>
+					<td>
+						<a href='delete_user.php?id=".$row['id']."&fname=".$row['first_name']."&lname=".$row['last_name']."&course=".$row['course']."&section=".$row['section']."'>Delete</a>
+					</td>
+					<td>".
+						$row["tag"]
+					."</td>
+					<td>".
+						$row["first_name"]." ".$row["last_name"]
+					."</td>
+					<td>".
+						$row["course"]
+					."</td>
+					<td>".
+						$row["section"]
+					."</td>
+					</tr>";
+				}
+				echo '</table>';
+			?>
+		</div>
+		
+        
+		
+        <!--  end Navigation Bar -->        
+        
+		
+    </div>		
+
+    
+    
+    <br/><br/>
+    
 	<?php
 		mysqli_query($dbc, "COMMIT");
 		mysqli_close($dbc); //always close the connection for security

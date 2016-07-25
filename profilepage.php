@@ -39,15 +39,12 @@
 					<?php	
 						}
 						else
-						{
-					?>
-						<li><a href="useronline.php">Who's Online</a></li>  
-						<li><a href="playgame_iterative.php">Play Iterative Mode</a></li>
-						<li><a href="playgame_live.php">Play Game</a></li> 					
-					<?php
+						{					
+                            include("getPlayGame.php");                        
 						}
 					?>
-					
+					<li><a href="useronline.php">Who's Online</a></li>  
+                    
 					<li class="dropdown active">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">My Account <span class="caret"></span></a>
 						<ul class="dropdown-menu">

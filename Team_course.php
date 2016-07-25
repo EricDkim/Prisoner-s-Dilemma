@@ -98,7 +98,15 @@
 					<th align='left'><b>Group Member</b></th>										
 				</tr>";
 
-				$r = mysqli_query($dbc, "SELECT id,(SELECT tag FROM teamcode WHERE users_id = iterative_teams.member1) as member1,(SELECT tag FROM teamcode WHERE users_id = iterative_teams.member2) as member2,(SELECT tag FROM teamcode WHERE users_id = iterative_teams.member3) as member3,(SELECT tag FROM teamcode WHERE users_id = iterative_teams.member4) as member4 FROM iterative_teams WHERE Course_ID=".$id." ORDER by id asc");
+				$r = mysqli_query($dbc, 
+                                  "SELECT id,
+                                  (SELECT tag FROM teamcode WHERE users_id = iterative_teams.member1) as member1,
+                                  (SELECT tag FROM teamcode WHERE users_id = iterative_teams.member2) as member2,
+                                  (SELECT tag FROM teamcode WHERE users_id = iterative_teams.member3) as member3,
+                                  (SELECT tag FROM teamcode WHERE users_id = iterative_teams.member4) as member4 
+                                  FROM iterative_teams 
+                                  WHERE Course_ID=".$id." 
+                                  ORDER by id asc");
 				while ($row = mysqli_fetch_array($r))
 				{
 					echo 

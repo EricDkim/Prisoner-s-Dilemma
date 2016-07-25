@@ -25,7 +25,11 @@ WHERE  course.isIterative = 'yes'
        AND course.id = '$courseid' 
        AND  
        users.id
-       NOT IN (SELECT DISTINCT member1 FROM iterative_teams WHERE Course_ID = '$courseid')
+       NOT IN (
+       SELECT DISTINCT member1 FROM iterative_teams WHERE Course_ID = '$courseid'
+       UNION
+       SELECT DISTINCT member4 FROM iterative_teams WHERE Course_ID = '$courseid'
+       )
 ORDER BY rand() LIMIT 1");
 
 $rows = mysqli_num_rows($blue);
@@ -52,7 +56,11 @@ WHERE  course.isIterative = 'yes'
        AND course.id = '$courseid' 
        AND  
        users.id
-       NOT IN (SELECT DISTINCT member2 FROM iterative_teams WHERE Course_ID = '$courseid')
+       NOT IN (
+       SELECT DISTINCT member2 FROM iterative_teams WHERE Course_ID = '$courseid'
+       UNION
+       SELECT DISTINCT member4 FROM iterative_teams WHERE Course_ID = '$courseid'
+       )
 ORDER BY rand() LIMIT 1");
 
 $rows = mysqli_num_rows($yellow);
@@ -79,7 +87,11 @@ WHERE  course.isIterative = 'yes'
        AND course.id = '$courseid' 
        AND  
        users.id
-       NOT IN (SELECT DISTINCT member3 FROM iterative_teams WHERE Course_ID = '$courseid')
+       NOT IN (
+       SELECT DISTINCT member3 FROM iterative_teams WHERE Course_ID = '$courseid'
+       UNION
+       SELECT DISTINCT member4 FROM iterative_teams WHERE Course_ID = '$courseid'
+       )
 ORDER BY rand() LIMIT 1");
 
 $rows = mysqli_num_rows($red);
@@ -88,9 +100,6 @@ $rows = mysqli_num_rows($red);
         $result = $red->fetch_assoc();
         $redID = $result['id'];        
     }
-
-// get 4th member
-
 
 
 if (isset($blueID) || isset($yellowID) || isset($redID) )
@@ -107,6 +116,49 @@ else
      //$msg = "There are currently no more users under this Course to be added.";
      //echo '<script type="text/javascript">alert("' . $msg . '")</script>';
 }
+
+
+// get 4th member
+$random=mysqli_query($dbc, 
+"SELECT users.id 
+FROM users
+INNER JOIN 
+course
+on users.course = course.course_and_number
+and users.section = course.section 
+WHERE course.isIterative = 'yes'
+AND users.course <> 'admin'
+AND course.id = '$courseid'
+AND 
+users.id
+NOT IN (
+SELECT DISTINCT member1 FROM iterative_teams WHERE Course_ID = '$courseid' AND member1 IS NOT NULL
+UNION 
+SELECT DISTINCT member2 FROM iterative_teams WHERE Course_ID = '$courseid' AND member2 IS NOT NULL
+UNION
+SELECT DISTINCT member3 FROM iterative_teams WHERE Course_ID = '$courseid' AND member3 IS NOT NULL
+UNION
+SELECT DISTINCT member4 FROM iterative_teams WHERE Course_ID = '$courseid' and member4 IS NOT NULL
+)
+
+ORDER BY rand() LIMIT 1 ");
+
+$rows = mysqli_num_rows($random);
+	if ($rows == 1) {			
+        //retrieves the row
+        $result = $random->fetch_assoc();
+        $randomID = $result['id'];        
+    }
+
+if (isset($randomID))
+{
+    //insert members to iterative teams
+    $sqlUpdate = "UPDATE iterative_teams SET member4 = '$randomID' WHERE Course_ID = '$courseid' AND member1 = '$blueID' And member2 = '$yellowID' AND member3 = '$redID' ";
+    $dbc->query($sqlUpdate);			    
+}
+
+echo $sqlUpdate;
+
 
 $url = "Location: Team_course.php?id=" . $courseid ."&course=" . $course . "&section=" . $section . "&isValid=" . $valid ;            
 header($url); // Redirecting 
