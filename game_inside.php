@@ -164,7 +164,7 @@
             $query = $dbc->query($sql);
             $fetch = $query->fetch_assoc();
             $st = $fetch['status']+1;
-            if($st != 5){
+            if($st != 6){
                 $rr = $cpd.$opd;
                 switch ($rr){
                     case 11:

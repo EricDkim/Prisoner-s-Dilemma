@@ -59,6 +59,16 @@
 					Dump Semester Data
 				</button>		
                 -->
+        <div style="float:right; margin-right:15%">
+                <button type="button" class="btn btn-lg btn-warning" aria-haspopup="true" aria-expanded="false" id="addcour">
+					Add Course
+				</button>	   
+                <button type="button" class="btn btn-lg btn-warning" id="SetRoundLimit"  >
+                    Set Round Limit
+                </button>
+        </div>
+        
+        <br/><br/>
 		<!-- COURSES -->
         <div>
 			<?php
@@ -113,11 +123,7 @@
 				}
 				echo '</table>';
 			?>
-					<br/>
-				<button type="button" class="btn btn-lg btn-warning" style="position:relative; left:43%;" aria-haspopup="true" aria-expanded="false" id="addcour">
-					Add Course
-				</button>	
-            
+					<br/>                  
 		<br/><br/>
 					
 				<!--
