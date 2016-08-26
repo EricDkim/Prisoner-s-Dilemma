@@ -1,9 +1,6 @@
 <?php
     include('connection.php');
     include('session.php');
-    require_once("PHPDebug.php");
-    $debug = new PHPDebug();
-    
 
     $avg = (($gplayed!=0) AND ($score!=0)) ? $score/$gplayed : 0;
     $avg = round($avg,2);
@@ -74,15 +71,16 @@
     function show_game($id){
     	include('connection.php');
     	include('session.php');        
-    	$sql = "SELECT * FROM games_iterative WHERE id='$id'";                   	
+    	$sql = "SELECT *, (select round_limit from games_rounds) as round_limit FROM games_iterative WHERE id='$id'";                   	
         $query = $dbc->query($sql);
     	$fetch = $query->fetch_assoc();
     	$id = $fetch['id'];
     	$p1 = $fetch['player1'];
     	$p2 = $fetch['player2'];
+        $r_limit = $fetch['round_limit'];
         $status = $fetch['status'];
         $actual = $status+1;
-        $actual = ($actual > 5) ? 5 : $actual;
+        $actual = ($actual > $r_limit) ? $r_limit : $actual;
         $ra = $fetch['round'.$actual];
     	$ti = $fetch['time'];
     	$cp = ($p1 == $login_id) ? $p1 : $p2;
@@ -132,8 +130,8 @@
         ////  ***** WHAT HAPPENS WHEN TIME RUNS OUT??   //////
     	$t2 = time();
     	$tr = $ti-$t2;
-    	if($tr <= 0){
-    	    $sql = "UPDATE games_iterative SET status=6 WHERE id='$id'";
+    	if($tr <= 0){            
+    	    $sql = "UPDATE games_iterative SET status='$r_limit WHERE id='$id'";
     	    $dbc->query($sql);
             if($cpd == 0){              
                 $sql = "UPDATE users SET score=score-10 WHERE id='$cp'";
@@ -160,11 +158,12 @@
             </script>";
     	}
         elseif( ($opd!=0) AND ($cpd!=0) ){
-            $sql = "SELECT status FROM games_iterative WHERE id='$id'";
+            $sql = "SELECT status, (select round_limit from games_rounds) as round_limit FROM games_iterative WHERE id='$id'";
             $query = $dbc->query($sql);
             $fetch = $query->fetch_assoc();
             $st = $fetch['status']+1;
-            if($st != 6){
+            $r_limit = $fetch['round_limit'];
+            if($st != $r_limit){
                 $rr = $cpd.$opd;
                 switch ($rr){
                     case 11:
@@ -264,10 +263,12 @@
 					});
 				</script>";
         }
-        $sql = "SELECT * FROM games_iterative WHERE id='$id'";
+        $sql = "SELECT *, (select round_limit from games_rounds) as round_limit FROM games_iterative WHERE id='$id'";
         $query = $dbc->query($sql);
         $fetch = $query->fetch_assoc();
-        /* ROUND 1 */
+        $r_limit = $fetch['round_limit'];
+        
+        /* ROUND 1 */        
         $ra1 = $fetch['round1'];
         $cpd1 = ($p1 == $login_id) ? substr($ra1,0,1) : substr($ra1,2,1);
         $opd1 = ($p1 != $login_id) ? substr($ra1,0,1) : substr($ra1,2,1);
@@ -287,6 +288,33 @@
         $ra5 = $fetch['round5'];
         $cpd5 = ($p1 == $login_id) ? substr($ra5,0,1) : substr($ra5,2,1);
         $opd5 = ($p1 != $login_id) ? substr($ra5,0,1) : substr($ra5,2,1);
+        
+        /////////////////////////////
+        /* ROUND 6 */
+        $ra6 = $fetch['round6'];
+        $cpd6 = ($p1 == $login_id) ? substr($ra6,0,1) : substr($ra6,2,1);
+        $opd6 = ($p1 != $login_id) ? substr($ra6,0,1) : substr($ra6,2,1);
+        
+        /* ROUND 7 */
+        $ra7 = $fetch['round7'];
+        $cpd7 = ($p1 == $login_id) ? substr($ra7,0,1) : substr($ra7,2,1);
+        $opd7 = ($p1 != $login_id) ? substr($ra7,0,1) : substr($ra7,2,1);
+        
+        /* ROUND 8 */
+        $ra8 = $fetch['round8'];
+        $cpd8 = ($p1 == $login_id) ? substr($ra8,0,1) : substr($ra8,2,1);
+        $opd8 = ($p1 != $login_id) ? substr($ra8,0,1) : substr($ra8,2,1);
+        
+        /* ROUND 9 */
+        $ra9 = $fetch['round9'];
+        $cpd9 = ($p1 == $login_id) ? substr($ra9,0,1) : substr($ra9,2,1);
+        $opd9 = ($p1 != $login_id) ? substr($ra9,0,1) : substr($ra9,2,1);
+        
+        /* ROUND 10 */
+        $ra10 = $fetch['round10'];
+        $cpd10 = ($p1 == $login_id) ? substr($ra10,0,1) : substr($ra10,2,1);
+        $opd10 = ($p1 != $login_id) ? substr($ra10,0,1) : substr($ra10,2,1);
+        ///////////
         
         echo "<table class='table table-striped'>
             <tr>
@@ -329,16 +357,58 @@
                     <td class='".switch_class($opd5)."'>".switch_de($opd5)."</td>
                 </tr>";
             }
+        
+            /////////////
+            if($status > 5){
+                echo "<tr>
+                    <td>One</td>
+                    <td class='".switch_class($cpd6)."'>".switch_de($cpd6)."</td>
+                    <td class='".switch_class($opd6)."'>".switch_de($opd6)."</td>
+                </tr>";
+            }
+            if($status > 6){
+                echo "<tr>
+                    <td>Two</td>
+                    <td class='".switch_class($cpd7)."'>".switch_de($cpd7)."</td>
+                    <td class='".switch_class($opd7)."'>".switch_de($opd7)."</td>
+                </tr>";
+            }
+            if($status > 7){
+                echo "<tr>
+                    <td>Three</td>
+                    <td class='".switch_class($cpd8)."'>".switch_de($cpd8)."</td>
+                    <td class='".switch_class($opd8)."'>".switch_de($opd8)."</td>
+                </tr>";
+            }
+            if($status > 8){
+                echo "<tr>
+                    <td>Four</td>
+                    <td class='".switch_class($cpd9)."'>".switch_de($cpd9)."</td>
+                    <td class='".switch_class($opd9)."'>".switch_de($opd9)."</td>
+                </tr>";
+            }
+            if($status > 9){
+                echo "<tr>
+                    <td>Five</td>
+                    <td class='".switch_class($cpd10)."'>".switch_de($cpd10)."</td>
+                    <td class='".switch_class($opd10)."'>".switch_de($opd10)."</td>
+                </tr>";
+            }
+            ///////
+        
         echo "</table>";
-        if($status == 5){
-            $sql = "UPDATE games_iterative SET status=6 WHERE id='$id'";
+        if($status == $r_limit){
+            $sql = "UPDATE games_iterative SET status=status+1 WHERE id='$id'";
             $dbc->query($sql);
         }
-        $sql = "SELECT * FROM games_iterative WHERE id='$id'";
+        $sql = "SELECT *, (select round_limit from games_rounds) as round_limit FROM games_iterative WHERE id='$id'";
         $query = $dbc->query($sql);
         $fetch = $query->fetch_assoc();
+        $r_limit = $fetch['round_limit'];        
         $p1 = $fetch['player1'];
         $op = ($p1 != $login_id) ? $p1 : $fetch['player2'];
+        
+        
         /* ROUND 1 */
         $ra1 = $fetch['round1'];
         $cpd1 = ($p1 == $login_id) ? substr($ra1,0,1) : substr($ra1,2,1);
@@ -359,6 +429,29 @@
         $ra5 = $fetch['round5'];
         $cpd5 = ($p1 == $login_id) ? substr($ra5,0,1) : substr($ra5,2,1);
         $opd5 = ($p1 != $login_id) ? substr($ra5,0,1) : substr($ra5,2,1);
+        
+        /////////////////////
+        /* ROUND 6 */
+        $ra6 = $fetch['round6'];
+        $cpd6 = ($p1 == $login_id) ? substr($ra6,0,1) : substr($ra6,2,1);
+        $opd6 = ($p1 != $login_id) ? substr($ra6,0,1) : substr($ra6,2,1);
+        /* ROUND 7 */
+        $ra7 = $fetch['round7'];
+        $cpd7 = ($p1 == $login_id) ? substr($ra7,0,1) : substr($ra7,2,1);
+        $opd7 = ($p1 != $login_id) ? substr($ra7,0,1) : substr($ra7,2,1);
+        /* ROUND 8 */
+        $ra8 = $fetch['round8'];
+        $cpd8 = ($p1 == $login_id) ? substr($ra8,0,1) : substr($ra8,2,1);
+        $opd8 = ($p1 != $login_id) ? substr($ra8,0,1) : substr($ra8,2,1);
+        /* ROUND 9 */
+        $ra9 = $fetch['round9'];
+        $cpd9 = ($p1 == $login_id) ? substr($ra9,0,1) : substr($ra9,2,1);
+        $opd9 = ($p1 != $login_id) ? substr($ra9,0,1) : substr($ra9,2,1);
+        /* ROUND 10 */
+        $ra10 = $fetch['round10'];
+        $cpd10 = ($p1 == $login_id) ? substr($ra10,0,1) : substr($ra10,2,1);
+        $opd10 = ($p1 != $login_id) ? substr($ra10,0,1) : substr($ra10,2,1);
+        ///////////////
 
         $cpd1 = ($opd1 == 0) ? 0 : $cpd1;
         $cpd2 = ($opd2 == 0) ? 0 : $cpd2;
@@ -372,8 +465,22 @@
         $opd4 = ($cpd4 == 0) ? 0 : $opd4;
         $opd5 = ($cpd5 == 0) ? 0 : $opd5;
 
+        ////////////////
+        $cpd6 = ($opd6 == 0) ? 0 : $cpd6;
+        $cpd7 = ($opd7 == 0) ? 0 : $cpd7;
+        $cpd8 = ($opd8 == 0) ? 0 : $cpd8;
+        $cpd9 = ($opd9 == 0) ? 0 : $cpd9;
+        $cpd10 = ($opd10 == 0) ? 0 : $cpd10;
 
-        $scores =  sum_score($cpd1.$opd1.";".$cpd2.$opd2.";".$cpd3.$opd3.";".$cpd4.$opd4.";".$cpd5.$opd5);
+        $opd6 = ($cpd6 == 0) ? 0 : $opd6;
+        $opd7 = ($cpd7 == 0) ? 0 : $opd7;
+        $opd8 = ($cpd8 == 0) ? 0 : $opd8;
+        $opd9 = ($cpd9 == 0) ? 0 : $opd9;
+        $opd10 = ($cpd10 == 0) ? 0 : $opd10;
+        /////////////////////////////
+
+        $scores =  sum_score($cpd1.$opd1.";".$cpd2.$opd2.";".$cpd3.$opd3.";".$cpd4.$opd4.";".$cpd5.$opd5.";".$cpd6.$opd6.";".$cpd7.$opd7.";".$cpd8.$opd8.";".$cpd9.$opd9.";".$cpd10.$opd10);
+        
         $scores = explode(";", $scores);
         $sessionscore = $scores[0];
         $previousscore = $score-$sessionscore;
@@ -391,10 +498,6 @@
 
 
 // *********  START OF PAGE   ****************************************
-
-
-    //$sql = "SELECT id FROM login_history WHERE TIMESTAMPDIFF(MINUTE, log_in , NOW()) < 60 and log_out = '0000-00-00 00:00:00' AND busy = 0 AND isAdmin = 0 AND id != '$login_id' ORDER BY rand()";
-
     $sql = "SELECT users.id FROM login_history INNER JOIN users ON login_history.id = users.id INNER JOIN ( SELECT member2 as UserID FROM iterative_teams WHERE member1 = '$login_id' UNION SELECT member3 as UserID FROM iterative_teams WHERE member1 = '$login_id' UNION SELECT member4 as UserID FROM iterative_teams WHERE member1 = '$login_id' UNION SELECT member1 as UserID FROM iterative_teams WHERE member2 = '$login_id' UNION SELECT member3 as UserID FROM iterative_teams WHERE member2 = '$login_id' UNION SELECT member4 as UserID FROM iterative_teams WHERE member2 = '$login_id' UNION SELECT member1 as UserID FROM iterative_teams WHERE member3 = '$login_id' UNION SELECT member2 as UserID FROM iterative_teams WHERE member3 = '$login_id' UNION SELECT member4 as UserID FROM iterative_teams WHERE member3 = '$login_id' UNION SELECT member1 as UserID FROM iterative_teams WHERE member4 = '$login_id' UNION SELECT member2 as UserID FROM iterative_teams WHERE member4 = '$login_id' UNION SELECT member3 as UserID FROM iterative_teams WHERE member4 = '$login_id') as t1 ON users.id = t1.UserID WHERE 
 TIMESTAMPDIFF(MINUTE, login_history.log_in , NOW()) < 60 and login_history.log_out = '0000-00-00 00:00:00' AND login_history.busy = 0 AND login_history.isAdmin = 0 ORDER BY rand() LIMIT 1";
 
@@ -436,7 +539,7 @@ TIMESTAMPDIFF(MINUTE, login_history.log_in , NOW()) < 60 and login_history.log_o
     	$sql = "INSERT INTO games_iterative (player1,player2,time) VALUES ('$id','$login_id','$time')";
     	$query = $dbc->query($sql);
     	/* Get id from game */
-    	$sql = "SELECT id FROM games_iterative WHERE (player1='$login_id' OR player2='$login_id') AND (status!=6)";
+    	$sql = "SELECT id FROM games_iterative WHERE (player1='$login_id' OR player2='$login_id') AND (status!= (select round_limit from games_rounds))";
     	$query = $dbc->query($sql);
     	$fetch = $query->fetch_assoc();
     	$id = $fetch['id'];
@@ -445,7 +548,7 @@ TIMESTAMPDIFF(MINUTE, login_history.log_in , NOW()) < 60 and login_history.log_o
     }
     elseif($busy){
     	/* Get game id */
-    	$sql = "SELECT * FROM games_iterative WHERE (player1='$login_id' OR player2='$login_id') AND (status!=6)";
+    	$sql = "SELECT * FROM games_iterative WHERE (player1='$login_id' OR player2='$login_id') AND (status!=(select round_limit from games_rounds))";
     	$query = $dbc->query($sql);
     	$fetch = $query->fetch_assoc();
     	$id = $fetch['id'];
@@ -480,7 +583,7 @@ $('.btn_unbusy').click(function(){
 });
 </script>
     <?php
-    $sql = "SELECT * FROM games_iterative WHERE (player1='$login_id' OR player2='$login_id') AND (status=6) ORDER BY id DESC LIMIT 1";
+    $sql = "SELECT * FROM games_iterative WHERE (player1='$login_id' OR player2='$login_id') AND (status=(select round_limit from games_rounds)) ORDER BY id DESC LIMIT 1";
     $query = $dbc->query($sql);
     $fetch = $query->fetch_assoc();
     $p1 = $fetch['player1'];

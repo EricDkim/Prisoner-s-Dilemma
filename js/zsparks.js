@@ -75,6 +75,10 @@ $(document).ready(function()
 		window.open ('admin_add_course.php','_self');	
 	}$("#addcour").click(addCourse);
 	
+    function SetRoundLimit()
+    {
+        window.open ('round_limit.php','_self');
+    }$("#SetRoundLimit").click(SetRoundLimit);
 	
 	$(function(){
       $('#updateIterative').click(function(){
