@@ -36,9 +36,10 @@
                         include("getPlayGame.php");                        
                     ?>
 					<li><a href="useronline.php">Who's Online</a></li>
+                    
                     <!-- 
-                    <li><a href="playgame.php">Play Iterative Mode</a></li>
-					<li class="active"><a href="playgame_live.php">Play Game</a></li>
+                    <li><a href="playgame.php">Play Iterative Mode</a></li> 
+					<li class="active"><a href="playgame_iterative.php">Play Game</a></li>
                     -->
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">My Account <span class="caret"></span></a>
@@ -80,7 +81,7 @@
     			    </aside>
     			    <div class="col-xs-12 col-md-8" id="game_inside">
     			    	<?php
-    			    	    include_once('game_inside.php');
+    			    	    include_once('game_inside_iterative.php');
     			    	?>
     			    </div>
 			    </div>
@@ -92,7 +93,7 @@
 	<script>
         $(document).ready(function(){
             function get_data(){
-    	        $('#game_inside').load('game_inside.php');
+    	        $('#game_inside').load('game_inside_iterative.php');
             }
             setInterval(function(){ get_data(); }, 1000);
             ion.sound({

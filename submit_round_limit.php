@@ -3,6 +3,7 @@
 <head>
 <?php
 	error_reporting(-1);
+	include('connection.php');
 ?>
     <meta charset="utf-8">
     <title>Prisoner's Dilemma</title>
@@ -10,28 +11,20 @@
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/stylesheet.css" rel="stylesheet">
-	<link href="css/custom.css" rel="stylesheet">	
+	<link href="css/custom.css" rel="stylesheet">
 	
 	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
 	<script src="js/zsparks.js"></script>
-	
 	<style>
-		#formbox 
+		#message 
 		{
 			width: 50%;
-			margin: 2% 5%;
+			margin: 2% 40%;
 		}
-		
-		#title
-		{
-			width: 50%;
-			margin: 2% 2%;
-		}
-	</style>
+	</style>	
 </head>
 <body>
-
 	<!-- Navigation Bar begin-->
 	<header class="navbar navbar-default">
 		<div class="container-fluid">
@@ -44,7 +37,6 @@
 				</button>
 				<a class="navbar-brand" href="index.php">Prisoner's Dilemma</a>
 			</div>
-
 			<!-- Collect the nav links and other content for toggling -->
 			<div class="collapse navbar-collapse" id="collapse">
 				<ul class="nav navbar-nav navbar-right">
@@ -64,16 +56,35 @@
 		</div><!-- /.container-fluid -->
 	</header><!--  end Navigation Bar -->
 	
-	<h1 id='title'>Permanently delete this user from all groups?</h1>
-	<?php						
-		echo "<form id='formbox' action='submit_delete_group.php' method='post'>
-			 <p>ID: <input type='text' name= 'id' size='20' maxlength='3' readonly value='".$_GET['id']."'/></p>
-			 <p>First Name: <input type='text' name= 'fname' size='20' maxlength='50' readonly value='".$_GET['fname']."'/></p>
-			 <p>Last Name: <input type='text' name= 'lname' size='20' maxlength='50' readonly value='".$_GET['lname']."'/></p>
-			 <p>Fixed Group: <input type='text' name= 'fgroup' size='10' maxlength='50' readonly value='".$_GET['fixed_group']."'/></p>	
-			 
-			 <p><input type='submit' name='Apply Changes' value='Submit' /></p>	   
-			 </form>";	
-	?>
+	<div id='message'>
+		<?php
+			//get the query
+			$limit = $_POST['limit'];
+								
+			if ($limit > 10)
+			{
+				print "Error - the maximum number of rounds is 10! <br/>" . mysqli_error($dbc);
+				exit;
+			}
+			else
+			{				
+                $result = mysqli_query($dbc, "UPDATE games_rounds SET round_limit =".$limit);					
+			}							
+			//if everything was ok:
+			if(mysqli_affected_rows($dbc) == 1)
+			{
+				//Ok message confirmation:
+				echo "Great. The Round Limit for games has been set. <br/>";
+				echo '<a href="editgame.php">Return to tables</a>';
+			}else{
+				echo "The Round Limit for games could not be set due to a system error. <br/>";
+				echo '<a href="editgame.php">Return to tables</a>';
+			}
+			
+			mysqli_query($dbc, "COMMIT");
+			//3. ALWAYS CLOSE A DATABASE AFTER USING IT.
+			mysqli_close($dbc); //dbc is for connection.php
+		?>
+	</div>
 </body>
 </html>

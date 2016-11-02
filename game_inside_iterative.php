@@ -61,7 +61,7 @@
     function show_game($id){
     	include('connection.php');
     	include('session.php');
-    	$sql = "SELECT *, (select round_limit from games_rounds) as round_limit FROM games WHERE id='$id' and complete = 0";
+    	$sql = "SELECT *, (select round_limit from games_rounds) as round_limit FROM games_iterative WHERE id='$id' and complete = 0";
       $query = $dbc->query($sql);
     	$fetch = $query->fetch_assoc();
     	$id = $fetch['id'];
@@ -78,11 +78,11 @@
 	  	if($actual > 1)
       {
             $check = $actual-1;
-            $sql = "SELECT round$check FROM games WHERE id='$id'";
+            $sql = "SELECT round$check FROM games_iterative WHERE id='$id'";
             $query = $dbc->query($sql);
             $fetch = $query->fetch_assoc();
             if($fetch['round'.$check]=="0-0"){
-                $sql = "UPDATE games SET status=status-1 WHERE id='$id'";
+                $sql = "UPDATE games_iterative SET status=status-1 WHERE id='$id'";
                 $dbc->query($sql);
                 //possibly  set complet =1 here
             }
@@ -91,7 +91,7 @@
       $opd = ($p1 != $login_id) ? substr($ra,0,1) : substr($ra,2,1);
       if(($ra == "0-0") AND ($cpd) AND ($opd))
       {
-            $sql = "UPDATE games SET status=status-1 WHERE id='$id'";
+            $sql = "UPDATE games_iterative SET status=status-1 WHERE id='$id'";
             $dbc->query($sql);
             //possibly complet = 1 here if time runs out?
       }
@@ -127,9 +127,9 @@
     	$tr = $ti-$t2;
     	if($tr <= 0) // if time runs out
       {
-    	    $sql = "UPDATE games SET status='$r_limit WHERE id='$id'";
+    	    $sql = "UPDATE games_iterative SET status='$r_limit WHERE id='$id'";
           $dbc->query($sql);
-          $sqlA = "UPDATE games SET Complete = 1 WHERE id='$id'";
+          $sqlA = "UPDATE games_iterative SET Complete = 1 WHERE id='$id'";
           $dbc->query($sqlA);
           $sqlB = "UPDATE login_history SET busy = 1 WHERE id = '$cp'";
           $dbc->query($sqlB);
@@ -141,19 +141,19 @@
               case 00:
                 $sql1 = "UPDATE users SET score=score-5 WHERE id='$cp'";
                 $sql2 = "UPDATE users SET score=score-5 WHERE id='$op'";
-                $sql3 = "UPDATE games SET round$actual" . "score_p1=-5, round$actual"."score_p2=-5 WHERE id='$id' ";
+                $sql3 = "UPDATE games_iterative SET round$actual" . "score_p1=-5, round$actual"."score_p2=-5 WHERE id='$id' ";
                 break;
               case 10:
               case 20:
                 $sql1 = "UPDATE users SET score=score+5 WHERE id='$cp'";
                 $sql2 = "UPDATE users SET score=score-5 WHERE id='$op'";
-                $sql3 = "UPDATE games SET round$actual" . "score_p1=5, round$actual"."score_p2=-5 WHERE id='$id' ";
+                $sql3 = "UPDATE games_iterative SET round$actual" . "score_p1=5, round$actual"."score_p2=-5 WHERE id='$id' ";
                 break;
               case 01:
               case 02:
                 $sql1 = "UPDATE users SET score=score-5 WHERE id='$cp'";
                 $sql2 = "UPDATE users SET score=score+5 WHERE id='$op'";
-                $sql3 = "UPDATE games SET round$actual" . "score_p1=-5, round$actual"."score_p2=5 WHERE id='$id' ";
+                $sql3 = "UPDATE games_iterative SET round$actual" . "score_p1=-5, round$actual"."score_p2=5 WHERE id='$id' ";
                 break;
           }
             echo "<script>
@@ -169,7 +169,7 @@
       elseif( ($opd!=0) AND ($cpd!=0) )// both made a choice
       {
           //// ***** Still has time, this is what happens with decisions *** ///
-            $sql = "SELECT status, (select round_limit from games_rounds) as round_limit FROM games WHERE id='$id' and Complete = 0";
+            $sql = "SELECT status, (select round_limit from games_rounds) as round_limit FROM games_iterative WHERE id='$id' and Complete = 0";
             $query = $dbc->query($sql);
             $fetch = $query->fetch_assoc();
             $st = $fetch['status'];
@@ -181,26 +181,26 @@
                     case 11:
                         $sql1= "UPDATE users SET score=score+3 WHERE id='$cp'";
                         $sql2= "UPDATE users SET score=score+3 WHERE id='$op'";
-                        $sql3= "UPDATE games SET round$rdnum" . "score_p1=3, round$rdnum"."score_p2=3 WHERE id='$id' ";
+                        $sql3= "UPDATE games_iterative SET round$rdnum" . "score_p1=3, round$rdnum"."score_p2=3 WHERE id='$id' ";
 
                         $sound = "glass";
                         break;
                     case 22:
                         $sql1= "UPDATE users SET score=score+1 WHERE id='$cp'";
                         $sql2= "UPDATE users SET score=score+1 WHERE id='$op'";
-                        $sql3= "UPDATE games SET round$rdnum" . "score_p1=1, round$rdnum"."score_p2=1 WHERE id='$id' ";
+                        $sql3= "UPDATE games_iterative SET round$rdnum" . "score_p1=1, round$rdnum"."score_p2=1 WHERE id='$id' ";
                         $sound = "light_bulb_breaking";
                         break;
                     case 12:
                         $sql1= "UPDATE users SET score=score+0 WHERE id='$cp'";
                         $sql2= "UPDATE users SET score=score+5 WHERE id='$op'";
-                        $sql3= "UPDATE games SET round$rdnum" . "score_p1=0, round$rdnum"."score_p2=5 WHERE id='$id' ";
+                        $sql3= "UPDATE games_iterative SET round$rdnum" . "score_p1=0, round$rdnum"."score_p2=5 WHERE id='$id' ";
                         $sound = "light_bulb_breaking";
                         break;
                     case 21:
                         $sql1= "UPDATE users SET score=score+5 WHERE id='$cp'";
                         $sql2= "UPDATE users SET score=score+0 WHERE id='$op'";
-                        $sql3= "UPDATE games SET round$rdnum" . "score_p1=5, round$rdnum"."score_p2=0 WHERE id='$id' ";
+                        $sql3= "UPDATE games_iterative SET round$rdnum" . "score_p1=5, round$rdnum"."score_p2=0 WHERE id='$id' ";
 
                         $sound = "bell_ring";
                         break;
@@ -220,8 +220,8 @@
 
             $newStat = ($st == $r_limit) ? $st : $st+1;
             $complete = ($st == $r_limit-1) ? 1: 0;
-            $sql = "UPDATE games SET status='$newStat' WHERE id='$id'";
-            $sql1 = "UPDATE games SET complete = '$complete' WHERE id='$id' ";
+            $sql = "UPDATE games_iterative SET status='$newStat' WHERE id='$id'";
+            $sql1 = "UPDATE games_iterative SET complete = '$complete' WHERE id='$id' ";
             $dbc->query($sql);
             $dbc->query($sql1);
         }
@@ -286,7 +286,7 @@
       }//end of else
 
 
-        $sql = "SELECT *, (select round_limit from games_rounds) as round_limit FROM games WHERE id='$id' and Complete = 0";
+        $sql = "SELECT *, (select round_limit from games_rounds) as round_limit FROM games_iterative WHERE id='$id' and Complete = 0";
         $query = $dbc->query($sql);
         $fetch = $query->fetch_assoc();
         $r_limit = $fetch['round_limit'];
@@ -421,10 +421,10 @@
 
         echo "</table>";
         if($status == $r_limit){
-            $sql = "UPDATE games SET status=status+1 WHERE id='$id'";
+            $sql = "UPDATE games_iterative SET status=status+1 WHERE id='$id'";
             $dbc->query($sql);
         }
-        $sql = "SELECT *, (select round_limit from games_rounds) as round_limit FROM games WHERE id='$id' AND Complete = 0";
+        $sql = "SELECT *, (select round_limit from games_rounds) as round_limit FROM games_iterative WHERE id='$id' AND Complete = 0";
         $query = $dbc->query($sql);
         $fetch = $query->fetch_assoc();
         $r_limit = $fetch['round_limit'];
@@ -521,7 +521,10 @@
 
 
 // *********  START OF PAGE   ****************************************
-    $sql = "SELECT id FROM login_history WHERE TIMESTAMPDIFF(MINUTE, log_in , NOW()) < 60 and log_out = '0000-00-00 00:00:00' AND busy = 0 AND isAdmin = 0 AND id != '$login_id' ORDER BY rand()";
+    // Only difference from live is the table (games_iterative)
+    $sql = "SELECT users.id FROM login_history INNER JOIN users ON login_history.id = users.id INNER JOIN ( SELECT member2 as UserID FROM iterative_teams WHERE member1 = '$login_id' UNION SELECT member3 as UserID FROM iterative_teams WHERE member1 = '$login_id' UNION SELECT member4 as UserID FROM iterative_teams WHERE member1 = '$login_id' UNION SELECT member1 as UserID FROM iterative_teams WHERE member2 = '$login_id' UNION SELECT member3 as UserID FROM iterative_teams WHERE member2 = '$login_id' UNION SELECT member4 as UserID FROM iterative_teams WHERE member2 = '$login_id' UNION SELECT member1 as UserID FROM iterative_teams WHERE member3 = '$login_id' UNION SELECT member2 as UserID FROM iterative_teams WHERE member3 = '$login_id' UNION SELECT member4 as UserID FROM iterative_teams WHERE member3 = '$login_id' UNION SELECT member1 as UserID FROM iterative_teams WHERE member4 = '$login_id' UNION SELECT member2 as UserID FROM iterative_teams WHERE member4 = '$login_id' UNION SELECT member3 as UserID FROM iterative_teams WHERE member4 = '$login_id') as t1 ON users.id = t1.UserID WHERE
+    TIMESTAMPDIFF(MINUTE, login_history.log_in , NOW()) < 60 and login_history.log_out = '0000-00-00 00:00:00' AND login_history.busy = 0 AND login_history.isAdmin = 0 ORDER BY rand() LIMIT 1";
+
     $query = $dbc->query($sql);
     if((!$query->num_rows) AND (!$busy)){
         echo "<div class='col-xs-12 text-center'>
@@ -545,10 +548,10 @@
     	$query = $dbc->query($sql);
     	/* Create game */
     	$time = time()+120;
-    	$sql = "INSERT INTO games (player1,player2,time) VALUES ('$id','$login_id','$time')";
+    	$sql = "INSERT INTO games_iterative (player1,player2,time) VALUES ('$id','$login_id','$time')";
     	$query = $dbc->query($sql);
     	/* Get id from game */
-    	$sql = "SELECT id FROM games WHERE (player1='$login_id' OR player2='$login_id') AND (status!= (select round_limit from games_rounds)) AND Complete = 0";
+    	$sql = "SELECT id FROM games_iterative WHERE (player1='$login_id' OR player2='$login_id') AND (status!= (select round_limit from games_rounds)) AND Complete = 0";
     	$query = $dbc->query($sql);
     	$fetch = $query->fetch_assoc();
     	$id = $fetch['id'];
@@ -557,7 +560,7 @@
     }
     elseif($busy){
     	/* Get game id */
-    	$sql = "SELECT * FROM games WHERE (player1='$login_id' OR player2='$login_id') AND (status!=(select round_limit from games_rounds) AND Complete = 0) ";
+    	$sql = "SELECT * FROM games_iterative WHERE (player1='$login_id' OR player2='$login_id') AND (status!=(select round_limit from games_rounds) AND Complete = 0) ";
     	$query = $dbc->query($sql);
     	$fetch = $query->fetch_assoc();
     	$id = $fetch['id'];
@@ -592,7 +595,7 @@ $('.btn_unbusy').click(function(){
 });
 </script>
     <?php
-    $sql = "SELECT * FROM games WHERE (player1='$login_id' OR player2='$login_id') AND (status=(select round_limit from games_rounds)) ORDER BY id DESC LIMIT 1";
+    $sql = "SELECT * FROM games_iterative WHERE (player1='$login_id' OR player2='$login_id') AND (status=(select round_limit from games_rounds)) ORDER BY id DESC LIMIT 1";
     $query = $dbc->query($sql);
     $fetch = $query->fetch_assoc();
     $p1 = $fetch['player1'];

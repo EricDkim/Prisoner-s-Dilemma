@@ -59,7 +59,14 @@
                 <form id="myForm" action="<?php  echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                     <p class="p_signUp_attributes">Registeration Form</p>
 					<!--PHP Code-->
-		<?php
+		
+                    
+                    
+                    
+                    <?php
+                    
+                    
+                    
 	include('connection.php');
 	$fnameErr = $lnameErr = $emailErr1 = $emailErr2 = $userErr = $passErr1 = $passErr2 = $emptyErr = "";
 	
@@ -70,8 +77,8 @@
 		$email2    = $_POST['ReEmail'];
 		$users     = $_POST['Username'];
 		$password1 = $_POST['Password'];
-		$password2 = $_POST['RePassword'];
-		
+		$password2 = $_POST['RePassword'];		
+        
 		//if values are not empty, proceed to store them in the database
 		if (!empty($fname) && !empty($lname) && !empty($email1) && !empty($email2) && !empty($users) && !empty($password1) && !empty($password2) && $Course != "") {
 			if ((!filter_var($email1, FILTER_VALIDATE_EMAIL) === false) && (!filter_var($email2, FILTER_VALIDATE_EMAIL) === false)) {	
@@ -79,6 +86,7 @@
 						
 					mysqli_query($dbc, "INSERT INTO users(usernames, first_name, last_name, email, confirmed_email, course, section, pw, confirmed_pw) 
 										VALUES ('$users', '$fname', '$lname', '$email1', '$email2', '$Course', '$Section', '$password1', '$password2')");
+                                        
 					
 					//SET TEAMCODE ID's
 					$max = mysqli_query($dbc, "SELECT * FROM teamcode WHERE users_id = (SELECT MAX(users_id) FROM teamcode)");  
@@ -95,8 +103,8 @@
 						someone dropped or they never had enough for a full group
 						check each user group through checkpoint like ifs to add right 
 						color to that group
-					*/
-					
+					*/					                                 
+                    
 					if ($num_rows == 1) //to ensure admin has no points, set a default admin. name and password are changable but admin is not deletable.
 					{
 						$values = array_values($row);  //splits the fetched row contents into an array
@@ -112,17 +120,19 @@
 						else
 							$group = 'Yellow';
 
-						$tag = $group . "-" . $id;
-
-						mysqli_query($dbc, "INSERT INTO teamcode(users_id, tag, user_group) VALUES ($id,'$tag','$group')");  //sets the total score to 0 on registration
-						mysqli_query($dbc, "INSERT INTO totals(users_id, totalscore) VALUES ($id, 0)");  //sets the total score to 0 on registration
+						$tag = $group . "-" . $id;                        
+                        
+                        $sql1 = "INSERT INTO teamcode(users_id, tag, user_group) VALUES (" . $id . ",'$tag','$group')";                mysqli_query($dbc, $sql1);  //sets the total score to 0 on registration
+                        $sql2 = "INSERT INTO totals(users_id, totalscore) VALUES (" . $id . ",0 )";               
+						mysqli_query($dbc, $sql2);  //sets the total score to 0 on registration
+                                                
 					}
 					else  //no one is in team code therefore no one is in the users table and this is first registration
 					{
 						mysqli_query($dbc, "INSERT INTO teamcode(users_id, tag, user_group) VALUES (2,'Blue-2','Blue')");  //sets the total score to 0 on registration
 						mysqli_query($dbc, "INSERT INTO totals(users_id, totalscore) VALUES (2, 0)");  //sets the total score to 0 on registration
 					}
-					header('Location:index.php');
+					header('Location:index.php');                    
 				}
 			}
 		} 
@@ -178,7 +188,9 @@
 						<span class="error"> <?php  echo $passErr2; ?></span>
 					<label style="margin-top:10px; font-size:1.2em">&nbsp;&nbsp;<strong>Current Course & Section</strong></label><br>
 					<select class = "dropdown_1" name="CourseName" style="margin-left: 10px; margin-top: 10px; height:30px">
-                        <span class="error"> <?php  echo $courseSectionErr; ?></span>
+                        <span class="error"> 
+                                                   
+                        </span>
 						<option hidden value='0'>Course</option>
 						<?php
 							$result = mysqli_query($dbc, "SELECT DISTINCT course_and_number FROM course");
@@ -223,6 +235,13 @@
 			//3. ALWAYS CLOSE A DATABASE AFTER USING IT.
 			mysqli_close($dbc); //dbc is for connection.php		
 		?>
+        
+        
+        
+        
+        
+        
+        
         <footer style="margin-top: 60px; margin-left:10px; margin-bottom:5px">Georgia Gwinnett College ITEC Department &copy; 2016</footer>
         <!-- javascript -->
         <script src="http://code.jquery.com/jquery-latest.min.js"></script>

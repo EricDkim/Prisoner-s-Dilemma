@@ -3,6 +3,7 @@
 <head>
 	<?php
 		error_reporting(-1);
+        include('connection.php');
 	?>
 
     <meta charset="utf-8">
@@ -64,10 +65,20 @@
 		</div><!-- /.container-fluid -->
 	</header><!--  end Navigation Bar -->
 
-	<h1 id='title'>Set the Maximum Range for Random</h1>
+	<h1 id='title'>Set Round Limit</h1>
 	<?php
-		echo "<form id='formbox' action='submit_random_limit.php' method='post'>
-			 <p>Max Range: <input type='text' name= 'limit' size='10' maxlength='2' placeholder='default 5'/></p>	
+        $result=mysqli_query($dbc, "SELECT * FROM games_rounds"); 
+		$rows = mysqli_num_rows($result);
+		if ($rows == 1) {
+			$_SESSION['login_user']=$username; // Initializing Session
+            //retrieves the row
+            $rsl = $result->fetch_assoc();
+            $round_limit = $rsl['round_limit'];            
+        }
+    
+    
+		echo "<form id='formbox' action='submit_round_limit.php' method='post'>
+			 <p>Round Limit: <input type='text' name= 'limit' size='10' maxlength='2' placeholder='maximum of 10' value='".$round_limit."'/></p>	
 			
 			 <p><input type='submit' name='Apply Changes' value='Submit' /></p>	   
 			 </form>";

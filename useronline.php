@@ -28,9 +28,14 @@
 			<div class="collapse navbar-collapse" id="collapse">
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="profilepage.php">Home</a></li>
+                    <?php
+                        include("getPlayGame.php");                        
+                    ?>
 					<li class="active"><a href="useronline.php">Who's Online</a></li>
-					<!--<li><a href="playgame.php">Play Iterative Mode</a></li>-->
-					<li><a href="playgame_live.php">Play Game</a></li>
+					
+                    <!--<li><a href="playgame.php">Play Iterative Mode</a></li>
+					<li><a href="playgame_live.php">Play Game</a></li>-->
+                    
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">My Account <span class="caret"></span></a>
 						<ul class="dropdown-menu">
@@ -44,31 +49,25 @@
 		</div><!-- /.container-fluid -->
 	</header><!-- end Navigation Bar -->
 
-	<!-- list of users online -->
+	<!-- list of users online -->    
 	<?php
 		include('connection.php');
 		include('session.php');
 		echo "<spam style ='margin-left:10px'>Not ".$login_session." ".$login_lname." ? We would appreciate if you "."<a style='text-decoration:none' href='logout.php'><strong> bug off </strong></a> ". "  right away!</span>";
-
-        //$online_users_query ="SELECT * from users WHERE online_status='1' and course <> 'admin' ";
+        
         $online_users_query = "SELECT teamcode.users_id, teamcode.tag FROM login_history INNER JOIN teamcode ON login_history.id = teamcode.users_id WHERE isAdmin = 0 AND TIMESTAMPDIFF(MINUTE, log_in, NOW()) < 60 AND log_out = '0000-00-00 00:00:00'";        
-		//$offline_users_query="SELECT * from users WHERE online_status='0' and course <> 'admin' ";
-		$result = $dbc -> query($online_users_query);
-		//$result1 = $dbc -> query($offline_users_query);
-		if ($result -> num_rows > 0) 
-		{
+		$result = $dbc -> query($online_users_query);		
+		                                    
+            echo 
+            "<div class='container'>
+                <div class='user-list'>
+                    <ul class='list-unstyled'>
 
-	?>
-	
-	<div class="container">
-		<div class="user-list">
-			<ul class="list-unstyled">
-
-				<li>
-				<?php while ($row = $result->fetch_assoc()) 
-						{
-					
-							if (($row['users_id']) != $login_id) {
+                        <li>
+                        ";
+				while ($row = $result->fetch_assoc()) 
+						{					                    
+							//if (($row['users_id']) != $login_id) {
 
                                 $tag = strtolower($row["tag"]);
                                 $exp = explode("-",$tag);
@@ -93,43 +92,17 @@
                                         "</div>".
                                         "</div>";
                                         break;
-                                }
+                                } // end of switch                       
+							//}//end of if
+						} //end of while
+		  echo 
+            "           </li>
 
-                                // check for userid
-                                //echo "&nbsp;"."<div class='outerContainer green'>".
-                                //    "<div class='innerContainer'>"."<span>".$row['id']."</span>"."<br />".
-                                //    "</div>".
-                                //    "</div>";
-
-                                /*echo "&nbsp;"."<div class='outerContainer green'>".
-									"<div class='innerContainer'>"."<a href='playgame.php?id=".$row['id']."' style='color:white'>".$row['id']."</a>"."<br />".
-									"</div>".
-									"</div>";
-                                */
-								
-							}
-						} 
-		}
-				?>
-				</li>
-				<!--
-                    <li>
-					?php
-					if ($result1 -> num_rows > 0) {
-						while ($row = $result1->fetch_assoc()) 
-						{
-						echo "&nbsp;"."<div class='outerContainer red'>".
-							"<div class='innerContainer'>" .$row['id']."<br />".
-							"</div>".
-						"</div>";
-						}
-					}		
-					?
-				</li>-->
-			</ul>
-		</div>
-	</div>
-	<?php
+                    </ul>
+                </div>
+            </div>
+	        ";        
+    
 		mysqli_query($dbc, "COMMIT");
 		//3. ALWAYS CLOSE A DATABASE AFTER USING IT.
 		mysqli_close($dbc); //dbc is for connection.php

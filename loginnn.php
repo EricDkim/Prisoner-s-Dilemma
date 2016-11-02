@@ -5,15 +5,15 @@
 */
 error_reporting(-1);
 //session_start(); // Starting Session //BETTER TO START SESSION AT THE START OF EVERY PAGE
-$error=''; // Variable To Store Error Message    
+$error=''; // Variable To Store Error Message
 
 
-if (isset($_POST['submit'])) {           
+if (isset($_POST['submit'])) {
 	if (empty($_POST['username']) || empty($_POST['password'])) {
 		$error = "Username and Password are required fields*";
 	}
 	else
-	{       
+	{
 		// Define $username and $password
 		$username=$_POST['username'];
 		$password=$_POST['password'];
@@ -23,7 +23,7 @@ if (isset($_POST['submit'])) {
 		$password = stripslashes($password);
 		$username = mysqli_real_escape_string($dbc, $username);
 		$password = mysqli_real_escape_string($dbc, $password);
-        
+
 		$result=mysqli_query($dbc, "select id,course from users where pw='$password' AND usernames='$username'"); //THE REPLACEMENT FOR mysql_query
 		$rows = mysqli_num_rows($result);
 		if ($rows == 1) {
@@ -34,16 +34,16 @@ if (isset($_POST['submit'])) {
             $_SESSION['$user_id'] = $user_id;
 
             // store online session
-            $sqlProcess = "DELETE FROM login_history WHERE id = '$user_id'";            
+            $sqlProcess = "DELETE FROM login_history WHERE id = '$user_id'";
             $dbc->query($sqlProcess);
-            $sqlInsert = "INSERT INTO login_history (id,log_in,isAdmin) VALUES ('$user_id', NOW(), 0)";
-            $dbc->query($sqlInsert);			
-			 
+            $sqlInsert = "INSERT INTO login_history (id,log_in,isAdmin,busy) VALUES ('$user_id', NOW(), 0,1)";
+            $dbc->query($sqlInsert);
+
             // Retrieves admin course info
 			$admincourse = $courses['course'];
-			$_SESSION['admin_course'] = $admincourse;  
-            
-		} else {                   
+			$_SESSION['admin_course'] = $admincourse;
+
+		} else {
 			$error = "Username or Password is invalid";
 		}
 	}

@@ -92,19 +92,19 @@
 					}
 				}
 				?>
-				
-                <!--
+				                
                 <li class='list-group-item'>					
 					<form method = "POST" action = "<?php  echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" >
 						<input type = "hidden" name = "course" value = "iterate_history"/>
-						<button style="background-color:#ddd; color:black" type = "submit" class="btn btn-default">Iterate History</button>
+						<button style="background-color:#ddd; color:black" type = "submit" class="btn btn-default">Iterate Game History</button>
 					</form>
 				</li>
-                -->
+                
 				<li class='list-group-item'>					
 					<form method = "POST" action = "<?php  echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" >
 						<input type = "hidden" name = "course" value = "random_history"/>
-						<button style="background-color:#ddd; color:black" type = "submit" class="btn btn-default">Game History</button>
+						<button style="background-color:#ddd; color:black" type = "submit" class="btn btn-default">Live Game History</button>
+                        
 					</form>
 				</li>				
 		<?php
@@ -183,19 +183,18 @@
 					}
 						echo "</tr> ";
 						
-					if (IsSet($_POST["course"]) && $_POST["course"] == "iterate_history")  //display iterate history
+					if (IsSet($_POST["course"]) && $_POST["course"] == "iterate_history")  //display iterative history
 					{
-						$query = 'SELECT player1, player2, player1_choice, player2_choice FROM history';						
+						$query = 'SELECT id, (SELECT tag FROM teamcode WHERE users_id = games.player1) as player1, (SELECT tag FROM teamcode WHERE users_id = games.player2) as player2, round1score_p1, round1score_p2, round2score_p1, round2score_p2,round3score_p1,round3score_p2,round4score_p1,round4score_p2,round5score_p1,round5score_p2, LastUpdateDate FROM games_iterative as games';
 					}
 					elseif (IsSet($_POST["course"]) && $_POST["course"] == "random_history")  //display random history
 					{	
 						$query = 'SELECT id, (SELECT tag FROM teamcode WHERE users_id = games.player1) as player1, (SELECT tag FROM teamcode WHERE users_id = games.player2) as player2, round1score_p1, round1score_p2, round2score_p1, round2score_p2,round3score_p1,round3score_p2,round4score_p1,round4score_p2,round5score_p1,round5score_p2, LastUpdateDate FROM games';
-                                                
-                        
 					}					
 					elseif (!IsSet($_POST["course"]) || !IsSet($_POST["section"]))  //display all courses and sections
-					{							
+					{	                        
 						$query = 'select usernames, last_name, first_name, score, course, section from users u left join totals ts on u.id = ts.users_id ORDER BY course, section;';
+                        
 					}
 					else  //display one course and section
 					{
