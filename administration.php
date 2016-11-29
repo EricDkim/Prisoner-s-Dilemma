@@ -15,7 +15,7 @@
 	<link href="css/custom.css" rel="stylesheet">
     <!--<script src="js/respond.js"></script -->	
 	
-	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<script src="//code.jquery.com/jquery-latest.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
 	<script src="js/zsparks.js"></script>
 </head>

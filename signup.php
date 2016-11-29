@@ -244,7 +244,7 @@
         
         <footer style="margin-top: 60px; margin-left:10px; margin-bottom:5px">Georgia Gwinnett College ITEC Department &copy; 2016</footer>
         <!-- javascript -->
-        <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+        <script src="//code.jquery.com/jquery-latest.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
         <script src="js/zsparks.js"></script>
         <script language="Javascript" type="text/javascript">
