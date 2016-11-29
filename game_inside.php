@@ -175,7 +175,7 @@
             $st = $fetch['status'];
             $r_limit = $fetch['round_limit'];
             $rdnum = $st+1;
-            if($st >= $r_limit){
+            if($st <= $r_limit){
                 $rr = $cpd.$opd;
                 switch ($rr){
                     case 11:
