@@ -175,7 +175,7 @@
             $st = $fetch['status'];
             $r_limit = $fetch['round_limit'];
             $rdnum = $st+1;
-            if($st != $r_limit){
+            if($st >= $r_limit){
                 $rr = $cpd.$opd;
                 switch ($rr){
                     case 11:
@@ -547,7 +547,7 @@
         $sql = "UPDATE login_history SET busy = 1 WHERE id='$id' OR id = '$login_id'";
     	$query = $dbc->query($sql);
     	/* Create game */
-    	$time = time()+120;
+    	$time = time()+60;
     	$sql = "INSERT INTO games_iterative (player1,player2,time) VALUES ('$id','$login_id','$time')";
     	$query = $dbc->query($sql);
     	/* Get id from game */

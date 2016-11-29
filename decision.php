@@ -13,7 +13,7 @@
     $actual = $fetch['status'] + 1;
     $round = $fetch['round'.$actual];
     $de = ($p1 == $login_id) ? substr_replace($round,$de,0,1) : substr_replace($round,$de,2,1);
-    $time = time()+120;
+    $time = time()+60;//adjust timer 
     
     //used to keep the game loop going
     $sql = "UPDATE games SET round$actual='$de',time='$time' WHERE id='$id'";
